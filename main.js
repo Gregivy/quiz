@@ -1,101 +1,172 @@
-var quizes = [
-	{title:"Номер 1", desc:"Описание ацушпаоуцщаоуцщаоцщуаоуща", img:["1.jpg","2.jpg","3.jpg"], link:""},
-	{title:"Номер 1", desc:"Описание ацушпаоуцщаоуцщаоцщуаоуща", img:["1.jpg","2.jpg","3.jpg"], link:""},
-	{title:"Номер 1", desc:"Описание ацушпаоуцщаоуцщаоцщуаоуща", img:"", link:""},
-	{title:"Номер 1", desc:"Описание ацушпаоуцщаоуцщаоцщуаоуща", img:"", link:""},
-	{title:"Номер 1", desc:"Описание ацушпаоуцщаоуцщаоцщуаоуща", img:"", link:""},
-	{title:"Номер 1", desc:"Описание ацушпаоуцщаоуцщаоцщуаоуща", img:"", link:""},
-	{title:"Номер 1", desc:"Описание ацушпаоуцщаоуцщаоцщуаоуща", img:"", link:""},
-];
+var _ = require("underscore");
 
-var padding = "5%";
-var paddingBottom = 10;
+var ip = "http://192.168.43.11:3000/";
+
+var userdata = function(){
+	return localStorage.getItem("userdata")?JSON.parse(localStorage.getItem("userdata")):{};
+};
+
+console.log(userdata());
+
+tabris.ui.set("background", "#ff4f38");
+
+var quizes = [];
+
+function loadQuizes(afterLoading,onError) {
+	fetch(ip+"api/quizes").then(function(response) {
+		if (response.status !== 200) {
+			onError();
+			return;
+		}
+		response.json().then(function(qs){
+			//quizes = qs.data;
+			_.map(qs,function(el) {
+				if (el.img.file) el.img.file = el.img.file.replace("localhost","192.168.43.11");
+				return el;
+			});
+			afterLoading(qs);
+		});
+	}).catch(function(err) {
+		onError();
+	});
+}
+
+function fullQuizListLoad() {
+	loadQuizes(function(data) {
+		fullList.remove(0,fullList.get("items").length);
+		fullList.insert(data);
+		//console.log(fullList._items);
+		fullList.refresh();
+		fullList.set("refreshIndicator",false);
+	}, function() {
+		console.log("Ошибка соединения!");
+		fullList.set("refreshIndicator",false);
+	});	
+}
+
+function userQuizListLoad() {
+	loadQuizes(function(data) {
+		var ud = userdata();
+		userList.remove(0,userList.get("items").length);
+		userList.insert(_.filter(data, function (quiz) {
+			var trg = true;
+			if (quiz.cars && quiz.cars.length>0 && quiz.cars.indexOf(ud.car)==-1) {trg = false;}
+			else if (quiz.jobs && quiz.jobs.length>0 && quiz.jobs.indexOf(ud.job)==-1) {trg = false;} 
+			else if (quiz.sex && quiz.sex!="none" && quiz.sex!=ud.sex) {trg = false;}
+			else if (quiz.cities && quiz.cities.indexOf("none")==-1 && quiz.cities.indexOf(ud.city)==-1) {trg = false;}
+			else if (quiz.fromage && ud.age!="" && ud.age<quiz.fromage) {trg = false;} 
+			else if (quiz.toage && ud.age!="" && ud.age>quiz.toage) {trg = false;} 
+			return trg;
+		}));
+		//console.log(fullList._items);
+		userList.refresh();
+		userList.set("refreshIndicator",false);
+	}, function() {
+		console.log("Ошибка соединения!");
+		userList.set("refreshIndicator",false);
+	});	
+}
+
+/*fetch("http://192.168.43.11:3000/api/quizes").then(function(response) {
+	return response.json();
+}).then(function(qs){
+	quizes = qs.data;
+	fullList.remove(0,-1);
+	fullList.insert(quizes);
+	console.log(fullList._items);
+});*/
 
 var page = new tabris.Page({
   topLevel: true,
   title: "Оплачиваемые опросы"
 });
 
-var regPage = new tabris.Page({
-  topLevel: true,
-  title: "Регистрация"
-});
+var regPage;
+if (!localStorage.getItem('registered')) {
+	fetch(ip+"api/fields").then(function(response) {
+		if (response.status !== 200) {
+			onError();
+			return;
+		}
+		response.json().then(function(data){
+			var data = data.data;
+			console.log(data);
+			var fields = {};
+			fields.spheres = [];
+			fields.jobs = {};
+			fields.cars = _.findWhere(data, {type: "cars"}).value.split("\n");		
+			var jobs = _.findWhere(data, {type: "jobs"}).value;
+			jobs = jobs.split("-").slice(1);
+			for (var i=0; i<jobs.length; i++) {
+				var t = jobs[i].split("\n");
+				var sphere = t.shift();
+				fields.spheres.push(sphere);
+				fields.jobs[sphere] = _.filter(t,function(s) { return s==""?false:true;});
+			}
+			console.log(ip);
 
-var regMail = new tabris.TextInput({
-  layoutData: {left: padding, top: paddingBottom, right: padding},
-  message: "Ваш email",
-  keyboard: "email"
-}).appendTo(regPage);
-
-var regPhonenumber = new tabris.TextInput({
-  layoutData: {left: padding, top: [regMail,paddingBottom], right: padding},
-  message: "Ваш номер мобильного",
-  keyboard: "phone"
-}).appendTo(regPage);
-
-var regName = new tabris.TextInput({
-  layoutData: {left: padding, top: [regPhonenumber,paddingBottom], right: padding},
-  message: "Ваше имя"
-}).appendTo(regPage);
-
-var regSurname = new tabris.TextInput({
-  layoutData: {left: padding, top: [regName,paddingBottom], right: padding},
-  message: "Ваша фамилия"
-}).appendTo(regPage);
-
-var regFathersname = new tabris.TextInput({
-  layoutData: {left: padding, top: [regSurname,paddingBottom], right: padding},
-  message: "Ваше отчество"
-}).appendTo(regPage);
-
-var regGenderText = new tabris.TextView({
-	layoutData: {left: padding, top: [regFathersname,paddingBottom], right: "40%"},
-	text: "Ваш пол: "
-}).appendTo(regPage);
-
-var regGender = new tabris.Picker({
-  	layoutData: {left: [regGenderText,0], top: [regFathersname,paddingBottom], right: padding},
-  	items: ["Мужчина","Женщина"]
-}).appendTo(regPage);
-
-var regButton = new tabris.Button({
-  	layoutData: {left: padding, top: [regGender,paddingBottom], right: padding},
-  	background: "green",
-  	text: "Зарегистрироваться"
-}).on("select", function () {
-	//regPage.close();
+			regPage = require("./regpage")(page,fields,ip);
+			regPage.open();
+		});
+	}).catch(function(err) {
+		onError();
+	});
+} else {
 	page.open();
-}).appendTo(regPage);
+}
 
+
+var enterPage = require("./enterpage");
 
 var fullList = require("./list")(quizes);
+
+var userList = require("./list")([]);
+
+var infoView = require("./infoview");
+
+
 
 //var picWidth = tabris.device.get("screenWidth")/3;
 
 var tabFolder = new tabris.TabFolder({
   layoutData: {left: 0, top: 0, right: 0, bottom: 0},
+  background: "#ff4f38",
+  textColor: "white",
   paging: true // enables swiping. To still be able to open the developer console in iOS, swipe from the bottom right.
 }).appendTo(page);
 
 var fullListTab = new tabris.Tab({
-  title: 'Все опросы'
+  title: 'Все опросы',
+  background: "white",
 }).appendTo(tabFolder);
 
 var userListTab = new tabris.Tab({
-  title: 'Мои опросы'
+  title: 'Мои опросы',
+  background: "white"
 }).appendTo(tabFolder);
 
 var infoTab = new tabris.Tab({
-  title: 'Информация'
+  title: 'Информация',
+  background: "white"
 }).appendTo(tabFolder);
 
 fullList.appendTo(fullListTab);
+userList.appendTo(userListTab);
+infoView.appendTo(infoTab);
 
 fullList.on("refresh", function (widget) {
 	//call update from server
-	fullList.refresh();
-	fullList.set("refreshIndicator",false);
+	fullQuizListLoad();
 });
 
-regPage.open();
-//page.open();
+userList.on("refresh", function (widget) {
+	//call update from server
+	userQuizListLoad();
+});
+
+
+fullQuizListLoad();
+userQuizListLoad();
+//enterPage.open();
+
+//page.open();v

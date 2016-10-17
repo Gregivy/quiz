@@ -1,7 +1,6 @@
-var list = function (items) {
+var list = function (url) {
   return new tabris.CollectionView({
     layoutData: {left: 0, top: 0, right: 0, bottom: 0},
-    items: items,
     refreshEnabled: true,
     itemHeight: 120,
     initializeCell: function(cell) {
@@ -10,6 +9,8 @@ var list = function (items) {
         layoutData: {top: 0, left: 0, right: 0, bottom: 0},
         scaleMode: "fill",
         opacity: 0.2
+      }).on("load",function (w,e) {
+
       }).appendTo(cell);
 
       var title = new tabris.TextView({
@@ -33,15 +34,24 @@ var list = function (items) {
         alignment: "left"
       }).appendTo(cell);
       var line = new tabris.Composite({
-  		layoutData: {left: 0, bottom: 0, height: 1, right: 0},
-  		background: "#cccccc"
+  		  layoutData: {left: 0, bottom: 0, height: 1, right: 0},
+  		  background: "#cccccc"
       }).appendTo(cell);
+      
       cell.on("change:item", function(widget, quiz) {
-        image.set("image", {src: quiz.img[0]});
+        if (!quiz.img || !quiz.img.file) {
+          image.set("image", {src: "empty.png"});
+        }
+        else { 
+          image.set("image", {src: quiz.img.file});
+        }
         //image2.set("image", {src: quiz.img[1]});
         //image3.set("image", {src: quiz.img[2]});
         title.set("text", quiz.title);
         desc.set("text", quiz.desc);
+        widget.on("tap",function() {
+          cordova.InAppBrowser.open(quiz.link, "_system");
+        });
       });
     }
   });

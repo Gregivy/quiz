@@ -1,13 +1,15 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="1" android-packageName="com.ekimscanner" id="com.ekimscanner" version="1.0.0">
-  <name>Test App</name>
+<widget android-versionCode="1" android-packageName="com.quiz" id="com.quiz" version="1.0.0">
+  <name>Paid quizes</name>
   <description>
-    
+    Paid quizes list with segmentation and push notifications.
   </description>
   <author email="gpoi@mail.ru" href="https://vk.com/gregp">
    Plyusch Gregory
   </author>
-  <plugin name="cordova-plugin-inappbrowser" version="1.4.0" />
+  <plugin name="cordova-plugin-inappbrowser" />
+  <plugin name="cordova-plugin-fcm" />
+  <plugin name="cordova-plugin-dialogs " />
   <access origin="*" />
   <allow-intent href="http://*/*" />
 </widget>
