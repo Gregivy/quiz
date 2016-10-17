@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "948302230929",
+    "firebase_url": "https://opros-ffcfe.firebaseio.com",
+    "project_id": "opros-ffcfe",
+    "storage_bucket": "opros-ffcfe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:948302230929:android:6143bbb1ba847d5b",
+        "android_client_info": {
+          "package_name": "com.quizes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "948302230929-inepahker7tqbt15b02e1h6borul5vob.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwrIICo_ToP1PspfEtMYvU_vwRKeZSH4w"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

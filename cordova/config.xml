@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="1" android-packageName="com.quiz" id="com.quiz" version="1.0.0">
+<widget android-versionCode="1" android-packageName="com.quizez" id="com.quizez" version="1.0.0">
   <name>Paid quizes</name>
   <description>
     Paid quizes list with segmentation and push notifications.
