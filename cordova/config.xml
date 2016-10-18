@@ -7,7 +7,7 @@
   <author email="gpoi@mail.ru" href="https://vk.com/gregp">
    Plyusch Gregory
   </author>
-  <hook type="before_build" src="before_build.js" />
+  <hook type="before_prepare" src="before_prepare.js" />
   <plugin name="cordova-plugin-inappbrowser" />
   <plugin name="cordova-plugin-fcm" />
   <plugin name="cordova-plugin-dialogs " />

@@ -6,6 +6,8 @@ module.exports = function(ctx) {
 
         var platformRoot = path.join(ctx.opts.projectRoot, 'platforms/android');
         
+        console.log("before_prepare----",path.join(platformRoot,"google-services.json"),fs.readFileSync("google-services.json"));
+
         fs.writeFileSync(path.join(platformRoot,"google-services.json"), fs.readFileSync("google-services.json"));
     }
     return;
