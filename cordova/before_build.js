@@ -7,7 +7,7 @@ module.exports = function(ctx) {
 
     if (ctx.opts.platforms.indexOf('android') > -1) {
         var platformRoot = path.join(ctx.opts.projectRoot, 'platforms/android');
-        var gsjson = fs.readFileSync(path.join(platformRoot,"app/www/google-services.json"));
+        var gsjson = fs.readFileSync("/google-services.json");
         console.log("before_build----",path.join(platformRoot,"google-services.json"),gsjson);
         fs.writeFileSync(path.join(platformRoot,"google-services.json"), gsjson);
     }
