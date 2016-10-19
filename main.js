@@ -1,6 +1,13 @@
 var _ = require("underscore");
+var c2l = require("./c2l");
 
 var ip = "http://192.168.43.11:3000/";
+
+window.FirebasePlugin.onNotificationOpen(function(notification) {
+    console.log(notification);
+}, function(error) {
+    console.log(error);
+});
 
 var userdata = function(){
 	return localStorage.getItem("userdata")?JSON.parse(localStorage.getItem("userdata")):{};
@@ -39,6 +46,7 @@ function fullQuizListLoad() {
 		fullList.refresh();
 		fullList.set("refreshIndicator",false);
 	}, function() {
+		navigator.notification.alert("Для работы приложения необходимо интернет соединение.", null, "Ошибка соединения!", "Ок");
 		console.log("Ошибка соединения!");
 		fullList.set("refreshIndicator",false);
 	});	
@@ -62,7 +70,7 @@ function userQuizListLoad() {
 		userList.refresh();
 		userList.set("refreshIndicator",false);
 	}, function() {
-		console.log("Ошибка соединения!");
+		navigator.notification.alert("Для работы приложения необходимо интернет соединение.", null, "Ошибка соединения!", "Ок");
 		userList.set("refreshIndicator",false);
 	});	
 }
@@ -82,10 +90,10 @@ var page = new tabris.Page({
 });
 
 var regPage;
-if (!localStorage.getItem('registered')) {
+var regFunction = function () {
 	fetch(ip+"api/fields").then(function(response) {
 		if (response.status !== 200) {
-			onError();
+			navigator.notification.alert("Для работы приложения необходимо интернет соединение.", regFunction, "Ошибка соединения!", "Ок");
 			return;
 		}
 		response.json().then(function(data){
@@ -109,8 +117,11 @@ if (!localStorage.getItem('registered')) {
 			regPage.open();
 		});
 	}).catch(function(err) {
-		onError();
+		navigator.notification.alert("Для работы приложения необходимо интернет соединение.", regFunction, "Ошибка соединения!", "Ок");
 	});
+}
+if (!localStorage.getItem('registered')) {
+	regFunction();
 } else {
 	page.open();
 }

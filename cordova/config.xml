@@ -9,7 +9,7 @@
   </author>
   <hook type="before_build" src="before_build.js" />
   <plugin name="cordova-plugin-inappbrowser" />
-  <plugin name="cordova-plugin-fcm" />
+  <plugin name="cordova-plugin-firebase" />
   <plugin name="cordova-plugin-dialogs " />
   <access origin="*" />
   <allow-intent href="http://*/*" />

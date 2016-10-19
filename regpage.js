@@ -1,3 +1,5 @@
+var c2l = require("./c2l");
+
 var padding = "10%";
 var paddingBottom = 5;
 var font = "18px";
@@ -112,6 +114,10 @@ var regButton = new tabris.Button({
     car:regCar.get("selection"),
     city:regCity.get("selection")
   };
+  if (data.email=="" || data.phone=="" || data.name=="" || data.age=="") {
+    navigator.notification.alert("Пожалуйста, заполните все поля!", null, "", "Ок");
+    return;
+  }
 	fetch(ip+"api/users", {
     method: "POST",
     headers: { 
@@ -125,7 +131,16 @@ var regButton = new tabris.Button({
     localStorage.setItem('registered','true');
     data.job = data.sphere+"_"+data.job;
     localStorage.setItem("userdata",JSON.stringify(data));
+
+    window.FirebasePlugin.subscribe(c2l(data.sex.toUpperCase()));
+    window.FirebasePlugin.subscribe(c2l((data.age+"лет").toUpperCase()));
+    window.FirebasePlugin.subscribe(c2l(data.job.toUpperCase()));
+    window.FirebasePlugin.subscribe(c2l(data.car.toUpperCase()));
+    window.FirebasePlugin.subscribe(c2l(data.city.toUpperCase()));
+
     page.open();
+  }).catch(function(err) {
+    navigator.notification.alert("Для работы приложения необходимо интернет соединение.", null, "Ошибка соединения!", "Ок");
   });
 }).appendTo(scrollView);
 
