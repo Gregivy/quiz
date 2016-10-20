@@ -1,7 +1,7 @@
 var _ = require("underscore");
 var c2l = require("./c2l");
 
-var ip = "http://192.168.43.11:3000/";
+var ip = "http://185.147.83.107:80/";
 
 window.FirebasePlugin.onNotificationOpen(function(notification) {
     console.log(notification);
@@ -62,8 +62,8 @@ function userQuizListLoad() {
 			else if (quiz.jobs && quiz.jobs.length>0 && quiz.jobs.indexOf(ud.job)==-1) {trg = false;} 
 			else if (quiz.sex && quiz.sex!="none" && quiz.sex!=ud.sex) {trg = false;}
 			else if (quiz.cities && quiz.cities.indexOf("none")==-1 && quiz.cities.indexOf(ud.city)==-1) {trg = false;}
-			else if (quiz.fromage && ud.age!="" && ud.age<quiz.fromage) {trg = false;} 
-			else if (quiz.toage && ud.age!="" && ud.age>quiz.toage) {trg = false;} 
+			else if (quiz.fromage && ud.age!="" && ud.age*1<quiz.fromage) {trg = false;} 
+			else if (quiz.toage && ud.age!="" && ud.age*1>quiz.toage) {trg = false;} 
 			return trg;
 		}));
 		//console.log(fullList._items);

@@ -1,4 +1,12 @@
 var c2l = require("./c2l");
+var userToken;
+
+window.FirebasePlugin.onTokenRefresh(function(token) {
+    // save this server-side and use it to push notifications to this device
+    userToken = token;
+}, function(error) {
+    console.error(error);
+});
 
 var padding = "10%";
 var paddingBottom = 5;
@@ -112,7 +120,8 @@ var regButton = new tabris.Button({
     sphere:regSphere.get("selection"),
     job:regJob.get("selection"),
     car:regCar.get("selection"),
-    city:regCity.get("selection")
+    city:regCity.get("selection"),
+    reg_id: userToken
   };
   if (data.email=="" || data.phone=="" || data.name=="" || data.age=="") {
     navigator.notification.alert("Пожалуйста, заполните все поля!", null, "", "Ок");
@@ -132,11 +141,11 @@ var regButton = new tabris.Button({
     data.job = data.sphere+"_"+data.job;
     localStorage.setItem("userdata",JSON.stringify(data));
 
-    window.FirebasePlugin.subscribe(c2l(data.sex.toUpperCase()));
-    window.FirebasePlugin.subscribe(c2l((data.age+"лет").toUpperCase()));
-    window.FirebasePlugin.subscribe(c2l(data.job.toUpperCase()));
-    window.FirebasePlugin.subscribe(c2l(data.car.toUpperCase()));
-    window.FirebasePlugin.subscribe(c2l(data.city.toUpperCase()));
+    //window.FirebasePlugin.subscribe(c2l(data.sex.toUpperCase()));
+    //window.FirebasePlugin.subscribe(c2l((data.age+"лет").toUpperCase()));
+    //window.FirebasePlugin.subscribe(c2l(data.job.toUpperCase()));
+    //window.FirebasePlugin.subscribe(c2l(data.car.toUpperCase()));
+    //window.FirebasePlugin.subscribe(c2l(data.city.toUpperCase()));
 
     page.open();
   }).catch(function(err) {
