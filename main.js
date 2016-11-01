@@ -1,8 +1,10 @@
 var _ = require("underscore");
 var c2l = require("./c2l");
 
-//var ip = "http://185.147.83.107:80/";
-var ip = "http://192.168.43.11:3000/"
+var moment = require("./moment");
+
+var ip = "http://185.147.83.107:80/";
+//var ip = "http://192.168.43.11:3000/"
 
 window.FirebasePlugin.onNotificationOpen(function(notification) {
     console.log(notification);
@@ -17,7 +19,7 @@ var userdata = function(){
 console.log(userdata());
 
 tabris.ui.set("background", "#ff4f38");
-tabris.ui.set("statusBarTheme", "dark");
+//tabris.ui.set("statusBarTheme", "dark");
 
 var quizes = [];
 
@@ -64,8 +66,10 @@ function userQuizListLoad() {
 			else if (quiz.jobs && quiz.jobs.length>0 && quiz.jobs.indexOf(ud.job)==-1) {trg = false;} 
 			else if (quiz.sex && quiz.sex!="none" && quiz.sex!=ud.sex) {trg = false;}
 			else if (quiz.cities && quiz.cities.indexOf("none")==-1 && quiz.cities.indexOf(ud.city)==-1) {trg = false;}
-			else if (quiz.fromage && ud.age!="" && ud.age*1<quiz.fromage) {trg = false;} 
-			else if (quiz.toage && ud.age!="" && ud.age*1>quiz.toage) {trg = false;} 
+			else if (quiz.kuzov && quiz.kuzov!="" && quiz.kuzov!=ud.kuzov) {trg = false;}
+			else if (quiz.caryear && quiz.caryear!="" && quiz.caryear!=ud.caryear) {trg = false;}
+			else if (quiz.fromage && ud.age!="" && moment().diff(moment(ud.age),'years')<=quiz.fromage) {trg = false;} 
+			else if (quiz.toage && ud.age!="" && moment().diff(moment(ud.age),'years')>=quiz.toage) {trg = false;} 
 			return trg;
 		}));
 		//console.log(fullList._items);
