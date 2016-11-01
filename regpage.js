@@ -1,5 +1,6 @@
 var c2l = require("./c2l");
 var userToken;
+var globalYear;
 
 window.FirebasePlugin.onTokenRefresh(function(token) {
     // save this server-side and use it to push notifications to this device
@@ -9,8 +10,8 @@ window.FirebasePlugin.onTokenRefresh(function(token) {
 });
 
 var padding = "10%";
-var paddingBottom = 5;
-var font = "18px";
+var paddingBottom = 3;
+var font = "14px";
 var jobs;
 var ip;
 
@@ -27,18 +28,21 @@ var scrollView = new tabris.ScrollView({
 var regMail = new tabris.TextInput({
   layoutData: {left: padding, top: paddingBottom, right: padding},
   message: "Ваш email",
-  keyboard: "email"
+  keyboard: "email",
+  font: font
 }).appendTo(scrollView);
 
 var regPhonenumber = new tabris.TextInput({
   layoutData: {left: padding, top: [regMail,paddingBottom], right: padding},
   message: "Мобильный, пример +79851234567",
-  keyboard: "phone"
+  keyboard: "phone",
+  font: font
 }).appendTo(scrollView);
 
 var regName = new tabris.TextInput({
   layoutData: {left: padding, top: [regPhonenumber,paddingBottom], right: padding},
-  message: "Ваше ФИО"
+  message: "Ваше ФИО",
+  font: font
 }).appendTo(scrollView);
 
 var regGenderText = new tabris.TextView({
@@ -48,14 +52,16 @@ var regGenderText = new tabris.TextView({
 }).appendTo(scrollView);
 
 var regGender = new tabris.Picker({
-  	layoutData: {left: [regGenderText,0], top: [regName,paddingBottom], right: padding},
-  	items: ["Мужчина","Женщина"]
+ 	layoutData: {left: [regGenderText,0], top: [regName,paddingBottom], right: padding},
+	items: ["Мужчина","Женщина"],
+  font: font
 }).appendTo(scrollView);
 
 var regAge = new tabris.TextInput({
   layoutData: {left: padding, top: [regGender,paddingBottom], right: padding},
   message: "Дата рождения",
-  keyboard: "number"
+  keyboard: "number",
+  font: font
 }).on("tap", function () {
   var options = {
     date: new Date(),
@@ -64,7 +70,11 @@ var regAge = new tabris.TextInput({
   };
    
   function onSuccess(date) {
-      regAge.set("text",date);
+      globalYear = date;
+      var day = date.getDate();
+      var month = date.getMonth() + 1;
+      var year = date.getFullYear();
+      regAge.set("text",day+"."+month+"."+year);
       regAge.set("focused",false);
   }
    
@@ -83,7 +93,8 @@ var regSphereText = new tabris.TextView({
 
 var regSphere = new tabris.Picker({
     layoutData: {left: [regGenderText,0], top: [regAge,paddingBottom], right: padding},
-    items: []
+    items: [],
+    font: font
 }).on("change:selection", function (w,s,o) {
   regJob.set("items", jobs[s]);
 }).appendTo(scrollView);
@@ -96,7 +107,8 @@ var regJobText = new tabris.TextView({
 
 var regJob = new tabris.Picker({
     layoutData: {left: [regGenderText,0], top: [regSphere,paddingBottom], right: padding},
-    items: []
+    items: [],
+    font: font
 }).appendTo(scrollView);
 
 var regCarText = new tabris.TextView({
@@ -107,7 +119,8 @@ var regCarText = new tabris.TextView({
 
 var regCar = new tabris.Picker({
     layoutData: {left: [regCarText,0], top: [regJob,paddingBottom], right: padding},
-    items: []
+    items: [],
+    font: font
 }).on("change:selection", function (w,s,o) {
   regCarModel.set("items", cars[s]);
 }).appendTo(scrollView);
@@ -120,7 +133,8 @@ var regCarModelText = new tabris.TextView({
 
 var regCarModel = new tabris.Picker({
     layoutData: {left: [regCarModelText,0], top: [regCar,paddingBottom], right: padding},
-    items: []
+    items: [],
+    font: font
 }).appendTo(scrollView);
 
 var regCarKuzovText = new tabris.TextView({
@@ -131,12 +145,15 @@ var regCarKuzovText = new tabris.TextView({
 
 var regCarKuzov = new tabris.Picker({
     layoutData: {left: [regCarKuzovText,0], top: [regCarModel,paddingBottom], right: padding},
-    items: ["Седан","Универсал","Хетчбэк","Купе","Лимузин","Микроавтобус","Минивэн","Хардтоп","Таун-кар","Комби","Лифтбэк","Фастбэк","Кабриолет","Родстер","Фаэтон","Ландо","Брогам","Тарга","Спайдер","Шутингбрейк","Пикап","Фургон"]
+    items: ["Седан","Универсал","Хетчбэк","Купе","Лимузин","Микроавтобус","Минивэн","Хардтоп","Таун-кар","Комби","Лифтбэк","Фастбэк","Кабриолет","Родстер","Фаэтон","Ландо","Брогам","Тарга","Спайдер","Шутингбрейк","Пикап","Фургон"],
+    font: font
 }).appendTo(scrollView);
 
 var regCarYear = new tabris.TextInput({
   layoutData: {left: padding, top: [regCarKuzov,paddingBottom], right: padding},
-  message: "Год выпуска авто"
+  message: "Год выпуска авто",
+  keyboard: "number",
+  font: font
 }).appendTo(scrollView);
 
 var regCityText = new tabris.TextView({
@@ -146,8 +163,9 @@ var regCityText = new tabris.TextView({
 }).appendTo(scrollView);
 
 var regCity = new tabris.Picker({
-    layoutData: {left: [regGenderText,0], top: [regCar,paddingBottom], right: padding},
-    items: ["Москва","Санкт-Петербург","Другой"]
+    layoutData: {left: [regGenderText,0], top: [regCarYear,paddingBottom], right: padding},
+    items: ["Москва","Санкт-Петербург","Другой"],
+    font: font
 }).appendTo(scrollView);
 
 
@@ -162,7 +180,7 @@ var regButton = new tabris.Button({
     phone:regPhonenumber.get("text"),
     name:regName.get("text"),
     sex:regGender.get("selection"),
-    age:regAge.get("text"),
+    age:globalYear,
     sphere:regSphere.get("selection"),
     job:regJob.get("selection"),
     car:regCar.get("selection"),
@@ -172,7 +190,7 @@ var regButton = new tabris.Button({
     city:regCity.get("selection"),
     reg_id: userToken
   };
-  if (data.email=="" || data.phone=="" || data.name=="" || data.age=="" || date.caryear=="") {
+  if (data.email=="" || data.phone=="" || data.name=="" || data.age=="" || data.caryear=="") {
     navigator.notification.alert("Пожалуйста, заполните все поля!", null, "", "Ок");
     return;
   }
@@ -210,6 +228,7 @@ module.exports = function(cp,fields,cip) {
   jobs = fields.jobs;
   cars = fields.cars;
   regJob.set("items", fields.jobs[fields.spheres[0]]);
+  regCar.set("items", fields.marks);
   regCarModel.set("items", fields.cars[fields.marks[0]]);
   return regPage;
 }

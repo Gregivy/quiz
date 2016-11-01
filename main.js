@@ -1,7 +1,8 @@
 var _ = require("underscore");
 var c2l = require("./c2l");
 
-var ip = "http://185.147.83.107:80/";
+//var ip = "http://185.147.83.107:80/";
+var ip = "http://192.168.43.11:3000/"
 
 window.FirebasePlugin.onNotificationOpen(function(notification) {
     console.log(notification);
@@ -16,6 +17,7 @@ var userdata = function(){
 console.log(userdata());
 
 tabris.ui.set("background", "#ff4f38");
+tabris.ui.set("statusBarTheme", "dark");
 
 var quizes = [];
 
@@ -104,6 +106,7 @@ var regFunction = function () {
 			fields.jobs = {};
 			fields.marks = [];
 			fields.cars = {};
+			console.log("data");
 
 			var cars = _.findWhere(data, {type: "cars"}).value;
 			cars = cars.split("_").slice(1);
@@ -111,7 +114,7 @@ var regFunction = function () {
 				var t = cars[i].split("\n");
 				var mark = t.shift();
 				fields.marks.push(mark);
-				fields.cars[makr] = _.filter(t,function(s) { return s==""?false:true;});
+				fields.cars[mark] = _.filter(t,function(s) { return s==""?false:true;});
 			}
 
 			var jobs = _.findWhere(data, {type: "jobs"}).value;
