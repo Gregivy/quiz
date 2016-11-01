@@ -102,9 +102,20 @@ var regFunction = function () {
 			var fields = {};
 			fields.spheres = [];
 			fields.jobs = {};
-			fields.cars = _.findWhere(data, {type: "cars"}).value.split("\n");		
+			fields.marks = [];
+			fields.cars = {};
+
+			var cars = _.findWhere(data, {type: "cars"}).value;
+			cars = cars.split("_").slice(1);
+			for (var i=0; i<cars.length; i++) {
+				var t = cars[i].split("\n");
+				var mark = t.shift();
+				fields.marks.push(mark);
+				fields.cars[makr] = _.filter(t,function(s) { return s==""?false:true;});
+			}
+
 			var jobs = _.findWhere(data, {type: "jobs"}).value;
-			jobs = jobs.split("-").slice(1);
+			jobs = jobs.split("_").slice(1);
 			for (var i=0; i<jobs.length; i++) {
 				var t = jobs[i].split("\n");
 				var sphere = t.shift();

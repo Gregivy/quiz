@@ -46,6 +46,7 @@
 
 
   <hook type="before_build" src="before_build.js" />
+  <plugin name="cordova-plugin-datepicker" />
   <plugin name="cordova-plugin-splashscreen" />
   <plugin name="cordova-plugin-inappbrowser" />
   <plugin name="cordova-plugin-firebase" />

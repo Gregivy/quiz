@@ -32,7 +32,7 @@ var regMail = new tabris.TextInput({
 
 var regPhonenumber = new tabris.TextInput({
   layoutData: {left: padding, top: [regMail,paddingBottom], right: padding},
-  message: "Ваш номер мобильного",
+  message: "Мобильный, пример +79851234567",
   keyboard: "phone"
 }).appendTo(scrollView);
 
@@ -54,8 +54,25 @@ var regGender = new tabris.Picker({
 
 var regAge = new tabris.TextInput({
   layoutData: {left: padding, top: [regGender,paddingBottom], right: padding},
-  message: "Ваш возраст",
+  message: "Дата рождения",
   keyboard: "number"
+}).on("tap", function () {
+  var options = {
+    date: new Date(),
+    maxDate: new Date(),
+    mode: 'date'
+  };
+   
+  function onSuccess(date) {
+      regAge.set("text",date);
+      regAge.set("focused",false);
+  }
+   
+  function onError(error) { // Android only 
+      console.log('Error: ' + error);
+  }
+   
+  datePicker.show(options, onSuccess, onError);
 }).appendTo(scrollView);
 
 var regSphereText = new tabris.TextView({
@@ -89,12 +106,41 @@ var regCarText = new tabris.TextView({
 }).appendTo(scrollView);
 
 var regCar = new tabris.Picker({
-    layoutData: {left: [regGenderText,0], top: [regJob,paddingBottom], right: padding},
+    layoutData: {left: [regCarText,0], top: [regJob,paddingBottom], right: padding},
+    items: []
+}).on("change:selection", function (w,s,o) {
+  regCarModel.set("items", cars[s]);
+}).appendTo(scrollView);
+
+var regCarModelText = new tabris.TextView({
+  layoutData: {left: padding, top: [regCar,paddingBottom+8], right: "40%"},
+  text: "Модель вашего авто: ",
+  font: font
+}).appendTo(scrollView);
+
+var regCarModel = new tabris.Picker({
+    layoutData: {left: [regCarModelText,0], top: [regCar,paddingBottom], right: padding},
     items: []
 }).appendTo(scrollView);
 
+var regCarKuzovText = new tabris.TextView({
+  layoutData: {left: padding, top: [regCarModel,paddingBottom+8], right: "40%"},
+  text: "Кузов вашего авто: ",
+  font: font
+}).appendTo(scrollView);
+
+var regCarKuzov = new tabris.Picker({
+    layoutData: {left: [regCarKuzovText,0], top: [regCarModel,paddingBottom], right: padding},
+    items: ["Седан","Универсал","Хетчбэк","Купе","Лимузин","Микроавтобус","Минивэн","Хардтоп","Таун-кар","Комби","Лифтбэк","Фастбэк","Кабриолет","Родстер","Фаэтон","Ландо","Брогам","Тарга","Спайдер","Шутингбрейк","Пикап","Фургон"]
+}).appendTo(scrollView);
+
+var regCarYear = new tabris.TextInput({
+  layoutData: {left: padding, top: [regCarKuzov,paddingBottom], right: padding},
+  message: "Год выпуска авто"
+}).appendTo(scrollView);
+
 var regCityText = new tabris.TextView({
-  layoutData: {left: padding, top: [regCar,paddingBottom+8], right: "40%"},
+  layoutData: {left: padding, top: [regCarYear,paddingBottom+8], right: "40%"},
   text: "Ваш город: ",
   font: font
 }).appendTo(scrollView);
@@ -120,10 +166,13 @@ var regButton = new tabris.Button({
     sphere:regSphere.get("selection"),
     job:regJob.get("selection"),
     car:regCar.get("selection"),
+    carmodel:regCarModel.get("selection"),
+    kuzov:regCarKuzov.get("selection"),
+    caryear:regCarYear.get("text"),
     city:regCity.get("selection"),
     reg_id: userToken
   };
-  if (data.email=="" || data.phone=="" || data.name=="" || data.age=="") {
+  if (data.email=="" || data.phone=="" || data.name=="" || data.age=="" || date.caryear=="") {
     navigator.notification.alert("Пожалуйста, заполните все поля!", null, "", "Ок");
     return;
   }
@@ -139,13 +188,14 @@ var regButton = new tabris.Button({
     });
     localStorage.setItem('registered','true');
     data.job = data.sphere+"_"+data.job;
+    data.car = data.car+"_"+data.carmodel;
     localStorage.setItem("userdata",JSON.stringify(data));
 
-    //window.FirebasePlugin.subscribe(c2l(data.sex.toUpperCase()));
-    //window.FirebasePlugin.subscribe(c2l((data.age+"лет").toUpperCase()));
-    //window.FirebasePlugin.subscribe(c2l(data.job.toUpperCase()));
-    //window.FirebasePlugin.subscribe(c2l(data.car.toUpperCase()));
-    //window.FirebasePlugin.subscribe(c2l(data.city.toUpperCase()));
+    window.FirebasePlugin.subscribe(c2l(data.sex.toUpperCase()));
+    window.FirebasePlugin.subscribe(c2l((data.age+"лет").toUpperCase()));
+    window.FirebasePlugin.subscribe(c2l(data.job.toUpperCase()));
+    window.FirebasePlugin.subscribe(c2l(data.car.toUpperCase()));
+    window.FirebasePlugin.subscribe(c2l(data.city.toUpperCase()));
 
     page.open();
   }).catch(function(err) {
@@ -158,7 +208,8 @@ module.exports = function(cp,fields,cip) {
   page = cp;
   regSphere.set("items", fields.spheres);
   jobs = fields.jobs;
+  cars = fields.cars;
   regJob.set("items", fields.jobs[fields.spheres[0]]);
-  regCar.set("items", fields.cars);
+  regCarModel.set("items", fields.cars[fields.marks[0]]);
   return regPage;
 }
