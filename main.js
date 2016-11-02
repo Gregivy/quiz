@@ -68,8 +68,8 @@ function userQuizListLoad() {
 			else if (quiz.cities && quiz.cities.indexOf("none")==-1 && quiz.cities.indexOf(ud.city)==-1) {trg = false;}
 			else if (quiz.kuzov && quiz.kuzov!="" && quiz.kuzov!=ud.kuzov) {trg = false;}
 			else if (quiz.caryear && quiz.caryear!="" && quiz.caryear!=ud.caryear) {trg = false;}
-			else if (quiz.fromage && ud.age!="" && moment().diff(moment(ud.age),'years')<=quiz.fromage) {trg = false;} 
-			else if (quiz.toage && ud.age!="" && moment().diff(moment(ud.age),'years')>=quiz.toage) {trg = false;} 
+			else if (quiz.fromage && ud.age!="" && moment().diff(moment(ud.age),'years')<quiz.fromage) {trg = false;} 
+			else if (quiz.toage && ud.age!="" && moment().diff(moment(ud.age),'years')>quiz.toage) {trg = false;} 
 			return trg;
 		}));
 		//console.log(fullList._items);
