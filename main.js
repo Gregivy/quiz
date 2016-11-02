@@ -7,6 +7,7 @@ var ip = "http://185.147.83.107:80/";
 //var ip = "http://192.168.43.11:3000/"
 
 window.FirebasePlugin.onNotificationOpen(function(notification) {
+	navigator.notification.alert("Просмотрите в разделе 'Мои опросы'", null, "Новое уведомление!", "Ок");
     console.log(notification);
 }, function(error) {
     console.log(error);

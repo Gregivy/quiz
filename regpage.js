@@ -209,11 +209,11 @@ var regButton = new tabris.Button({
     data.car = data.car+"_"+data.carmodel;
     localStorage.setItem("userdata",JSON.stringify(data));
 
-    window.FirebasePlugin.subscribe(c2l(data.sex.toUpperCase()));
+    /*window.FirebasePlugin.subscribe(c2l(data.sex.toUpperCase()));
     window.FirebasePlugin.subscribe(c2l((data.age+"лет").toUpperCase()));
     window.FirebasePlugin.subscribe(c2l(data.job.toUpperCase()));
     window.FirebasePlugin.subscribe(c2l(data.car.toUpperCase()));
-    window.FirebasePlugin.subscribe(c2l(data.city.toUpperCase()));
+    window.FirebasePlugin.subscribe(c2l(data.city.toUpperCase()));*/
 
     page.open();
   }).catch(function(err) {
