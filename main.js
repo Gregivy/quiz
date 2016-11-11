@@ -3,8 +3,8 @@ var c2l = require("./c2l");
 
 var moment = require("./moment");
 
-var ip = "http://185.147.83.107:80/";
-//var ip = "http://192.168.43.11:3000/"
+//var ip = "http://185.147.83.107:80/";
+var ip = "http://192.168.43.11:3000/"
 
 window.FirebasePlugin.onNotificationOpen(function(notification) {
 	navigator.notification.alert("Просмотрите в разделе 'Мои опросы'", null, "Новое уведомление!", "Ок");
@@ -122,7 +122,7 @@ var regFunction = function () {
 				fields.cars[mark] = _.filter(t,function(s) { return s==""?false:true;});
 			}
 
-			var jobs = _.findWhere(data, {type: "jobs"}).value;
+			/*var jobs = _.findWhere(data, {type: "jobs"}).value;
 			jobs = jobs.split("_").slice(1);
 			for (var i=0; i<jobs.length; i++) {
 				var t = jobs[i].split("\n");
@@ -130,7 +130,7 @@ var regFunction = function () {
 				fields.spheres.push(sphere);
 				fields.jobs[sphere] = _.filter(t,function(s) { return s==""?false:true;});
 			}
-			console.log(ip);
+			console.log(ip);*/
 
 			regPage = require("./regpage")(page,fields,ip);
 			regPage.open();

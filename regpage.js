@@ -85,30 +85,16 @@ var regAge = new tabris.TextInput({
   datePicker.show(options, onSuccess, onError);
 }).appendTo(scrollView);
 
-var regSphereText = new tabris.TextView({
-  layoutData: {left: padding, top: [regAge,paddingBottom+8], right: "40%"},
-  text: "Ваш сфера деятельности: ",
+var regSphere = new tabris.TextInput({
+  layoutData: {left: padding, top: [regAge,paddingBottom], right: padding},
+  message: "Ваша cфера деятельности",
   font: font
 }).appendTo(scrollView);
 
-var regSphere = new tabris.Picker({
-    layoutData: {left: [regGenderText,0], top: [regAge,paddingBottom], right: padding},
-    items: [],
-    font: font
-}).on("change:selection", function (w,s,o) {
-  regJob.set("items", jobs[s]);
-}).appendTo(scrollView);
-
-var regJobText = new tabris.TextView({
-  layoutData: {left: padding, top: [regSphere,paddingBottom+8], right: "40%"},
-  text: "Ваша должность: ",
+var regJob = new tabris.TextInput({
+  layoutData: {left: padding, top: [regSphere,paddingBottom], right: padding},
+  message: "Ваша должность",
   font: font
-}).appendTo(scrollView);
-
-var regJob = new tabris.Picker({
-    layoutData: {left: [regGenderText,0], top: [regSphere,paddingBottom], right: padding},
-    items: [],
-    font: font
 }).appendTo(scrollView);
 
 var regCarText = new tabris.TextView({
@@ -181,8 +167,8 @@ var regButton = new tabris.Button({
     name:regName.get("text"),
     sex:regGender.get("selection"),
     age:globalYear,
-    sphere:regSphere.get("selection"),
-    job:regJob.get("selection"),
+    sphere:regSphere.get("text"),
+    job:regJob.get("text"),
     car:regCar.get("selection"),
     carmodel:regCarModel.get("selection"),
     kuzov:regCarKuzov.get("selection"),
@@ -190,7 +176,7 @@ var regButton = new tabris.Button({
     city:regCity.get("selection"),
     reg_id: userToken
   };
-  if (data.email=="" || data.phone=="" || data.name=="" || data.age=="" || data.caryear=="") {
+  if (data.email=="" || data.phone=="" || data.name=="" || data.age=="" || data.caryear=="" || data.sphere=="" || data.job=="") {
     navigator.notification.alert("Пожалуйста, заполните все поля!", null, "", "Ок");
     return;
   }
@@ -224,10 +210,10 @@ var regButton = new tabris.Button({
 module.exports = function(cp,fields,cip) {
   ip = cip;
   page = cp;
-  regSphere.set("items", fields.spheres);
-  jobs = fields.jobs;
+  //regSphere.set("items", fields.spheres);
+  //jobs = fields.jobs;
   cars = fields.cars;
-  regJob.set("items", fields.jobs[fields.spheres[0]]);
+  //regJob.set("items", fields.jobs[fields.spheres[0]]);
   regCar.set("items", fields.marks);
   regCarModel.set("items", fields.cars[fields.marks[0]]);
   return regPage;
