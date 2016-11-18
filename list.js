@@ -2,7 +2,10 @@ var list = function (url) {
   return new tabris.CollectionView({
     layoutData: {left: 0, top: 0, right: 0, bottom: 0},
     refreshEnabled: true,
-    itemHeight: 120,
+    itemHeight: function(item) {
+      return 130+Math.round(item.desc.length/34)*20;
+
+    },
     initializeCell: function(cell) {
 
       var image = new tabris.ImageView({

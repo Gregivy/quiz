@@ -162,6 +162,7 @@ var tabFolder = new tabris.TabFolder({
   layoutData: {left: 0, top: 0, right: 0, bottom: 0},
   background: "#ff4f38",
   textColor: "white",
+  tabBarLocation: "top",
   paging: true // enables swiping. To still be able to open the developer console in iOS, swipe from the bottom right.
 }).appendTo(page);
 
