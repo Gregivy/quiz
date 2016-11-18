@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="1" android-packageName="com.quizes" id="com.quizes" version="1.0.0">
+<widget android-versionCode="2" android-packageName="com.quizes" id="com.quizes" version="1.0.1">
   <name>MoskvaOpros</name>
   <description>
     Paid quizes list with segmentation and push notifications.

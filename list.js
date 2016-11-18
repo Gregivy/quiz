@@ -3,7 +3,8 @@ var list = function (url) {
     layoutData: {left: 0, top: 0, right: 0, bottom: 0},
     refreshEnabled: true,
     itemHeight: function(item) {
-      return 130+Math.round(item.desc.length/34)*20;
+      var ends = item.desc.split("\n").length-1;
+      return 50+(Math.round(item.desc.length/34)+ends)*14+Math.round(item.title.length/23)*24;
 
     },
     initializeCell: function(cell) {
@@ -17,7 +18,7 @@ var list = function (url) {
       }).appendTo(cell);
 
       var title = new tabris.TextView({
-        layoutData: {left: "5%", top: "5%", right: "5%"},
+        layoutData: {left: "5%", top: 10, right: "5%"},
         font: "bold 24px",
         alignment: "left"
       }).appendTo(cell);
