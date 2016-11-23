@@ -61,6 +61,7 @@ var regAge = new tabris.TextInput({
   layoutData: {left: padding, top: [regGender,paddingBottom], right: padding},
   message: "Дата рождения",
   keyboard: "number",
+  enabled: false,
   font: font
 }).on("tap", function () {
   var options = {
